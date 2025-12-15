@@ -1,32 +1,230 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Quillory</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quillory — Voice journaling, simplified</title>
+  <meta name="description" content="A calm voice-journaling app that turns your day into a clean summary." />
+
+  <!-- Favicons (put files in /assets/) -->
+  <link rel="icon" href="/assets/favicon.png" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+
+  <!-- Social preview (optional but recommended) -->
+  <meta property="og:title" content="Quillory" />
+  <meta property="og:description" content="Voice journaling, simplified." />
+  <meta property="og:image" content="/assets/og.png" />
+  <meta property="og:type" content="website" />
+
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f7f6f3;
-      color: #222;
-      padding: 40px;
-      max-width: 720px;
-      margin: auto;
+    :root{
+      --bg:#f6f1e8;
+      --card:#ffffff;
+      --text:#1f1f1f;
+      --muted:rgba(0,0,0,.55);
+      --border:rgba(0,0,0,.10);
+      --green:#2f6e55;
+      --shadow:0 14px 40px rgba(0,0,0,.08);
+      --radius:18px;
     }
-    h1 { font-size: 32px; }
-    p { line-height: 1.6; }
-    a { color: #2f6a45; text-decoration: none; }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    a{color:var(--green);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1020px;margin:0 auto;padding:56px 22px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:46px;height:46px;border-radius:14px;
+      box-shadow:0 10px 24px rgba(0,0,0,.10);
+      background:#fff;object-fit:cover;
+      border:1px solid var(--border);
+    }
+    .brandTitle{font-size:20px;font-weight:800;letter-spacing:-.3px}
+    .nav{display:flex;gap:14px;color:var(--muted);font-size:14px}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:start}
+    @media (max-width:900px){.hero{grid-template-columns:1fr;}}
+    .h1{font-size:44px;line-height:1.08;margin:0 0 12px;letter-spacing:-1px}
+    .sub{margin:0 0 18px;color:var(--muted);font-size:16px;line-height:1.7}
+    .ctaRow{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:12px 14px;border-radius:999px;font-weight:700;font-size:14px;
+      border:1px solid var(--border);background:var(--card);
+    }
+    .btnPrimary{
+      background:var(--green);color:#fff;border-color:transparent;
+      box-shadow:0 14px 26px rgba(47,110,85,.22);
+    }
+    .note{margin-top:10px;color:var(--muted);font-size:13px}
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+    .screensHeader{display:flex;align-items:end;justify-content:space-between;margin-top:28px;margin-bottom:10px}
+    .screensHeader h2{margin:0;font-size:18px;letter-spacing:-.2px}
+    .screensHeader span{color:var(--muted);font-size:13px}
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:10px;
+    }
+    @media (max-width:900px){.grid{grid-template-columns:repeat(2, 1fr);}}
+    @media (max-width:520px){.grid{grid-template-columns:1fr;}}
+    .shot{
+      border-radius:16px;
+      border:1px solid var(--border);
+      background:#fff;
+      overflow:hidden;
+      aspect-ratio: 9 / 19.5;
+      display:block;
+      box-shadow:0 10px 28px rgba(0,0,0,.06);
+    }
+    .shot img{width:100%;height:100%;object-fit:cover;display:block}
+    .features{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+    }
+    @media (max-width:900px){.features{grid-template-columns:1fr}}
+    .feature h3{margin:0 0 6px;font-size:14px}
+    .feature p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+    footer{
+      margin-top:26px;padding-top:16px;border-top:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+      color:var(--muted);font-size:13px;
+    }
+
+    /* Simple lightbox */
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center;padding:22px;z-index:9999}
+    .lightbox.open{display:flex}
+    .lightbox img{max-width:min(520px, 92vw);max-height:92vh;border-radius:18px}
+    .closeBtn{
+      position:absolute;top:18px;right:18px;
+      background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22);
+      border-radius:999px;padding:10px 12px;font-weight:700;cursor:pointer
+    }
   </style>
 </head>
-<body>
-  <h1>Quillory</h1>
-  <p>A calm, private voice journaling app.</p>
 
-  <p>
-    <a href="/privacy">Privacy Policy</a> ·
-    <a href="/terms">Terms</a> ·
-    <a href="/support">Support</a>
-  </p>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <img class="logo" src="/assets/icon.png" alt="Quillory icon" />
+        <div class="brandTitle">Quillory</div>
+      </div>
+
+      <nav class="nav">
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1 class="h1">Voice journaling,<br/>simplified.</h1>
+        <p class="sub">
+          Record your thoughts through the day. Quillory turns them into one clean summary — calm, private, and fast.
+        </p>
+
+        <div class="ctaRow">
+          <!-- Replace # with your App Store link when ready -->
+          <a class="btn btnPrimary" href="#" aria-label="Download Quillory">Download</a>
+          <a class="btn" href="/support/">Contact support</a>
+        </div>
+
+        <div class="note">Support: <a href="mailto:support@quillory.app">support@quillory.app</a></div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <div style="font-weight:800;letter-spacing:-.2px;">A calmer way to log your day</div>
+          <div style="color:var(--muted);font-size:13px;">Private by default</div>
+        </div>
+        <div style="margin-top:12px;color:var(--muted);line-height:1.7;font-size:14px;">
+          • One-tap voice memories<br/>
+          • End-of-day summary<br/>
+          • Optional audio playback<br/>
+          • Delete anytime
+        </div>
+      </div>
+    </section>
+
+    <div class="screensHeader">
+      <h2>Screenshots</h2>
+      <span>Tap any image to zoom</span>
+    </div>
+
+    <section class="grid" id="shots">
+      <!-- Put images in /assets/screens/ and keep these filenames -->
+      <a class="shot" href="/assets/screens/01.png"><img src="/assets/screens/01.png" alt="Quillory screenshot 1"></a>
+      <a class="shot" href="/assets/screens/02.png"><img src="/assets/screens/02.png" alt="Quillory screenshot 2"></a>
+      <a class="shot" href="/assets/screens/03.png"><img src="/assets/screens/03.png" alt="Quillory screenshot 3"></a>
+      <a class="shot" href="/assets/screens/04.png"><img src="/assets/screens/04.png" alt="Quillory screenshot 4"></a>
+      <a class="shot" href="/assets/screens/05.png"><img src="/assets/screens/05.png" alt="Quillory screenshot 5"></a>
+      <a class="shot" href="/assets/screens/06.png"><img src="/assets/screens/06.png" alt="Quillory screenshot 6"></a>
+    </section>
+
+    <section class="features">
+      <div class="card feature">
+        <h3>Minimal friction</h3>
+        <p>Open the app, record, done. No complicated setup.</p>
+      </div>
+      <div class="card feature">
+        <h3>Built for privacy</h3>
+        <p>Your content is private by default. No ads, no data selling.</p>
+      </div>
+      <div class="card feature">
+        <h3>Clean summaries</h3>
+        <p>One paragraph that captures the day — in your tone.</p>
+      </div>
+    </section>
+
+    <footer>
+      <div>© <span id="y"></span> Quillory</div>
+      <div>
+        <a href="/privacy/">Privacy</a> ·
+        <a href="/terms/">Terms</a> ·
+        <a href="/support/">Support</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lb" role="dialog" aria-modal="true">
+    <button class="closeBtn" id="lbClose">Close</button>
+    <img id="lbImg" alt="Screenshot preview" />
+  </div>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    const lb = document.getElementById('lb');
+    const lbImg = document.getElementById('lbImg');
+    const close = document.getElementById('lbClose');
+
+    document.getElementById('shots').addEventListener('click', (e) => {
+      const a = e.target.closest('a');
+      if (!a) return;
+      e.preventDefault();
+      lbImg.src = a.getAttribute('href');
+      lb.classList.add('open');
+    });
+
+    close.addEventListener('click', () => lb.classList.remove('open'));
+    lb.addEventListener('click', (e) => { if (e.target === lb) lb.classList.remove('open'); });
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+  </script>
 </body>
 </html>
