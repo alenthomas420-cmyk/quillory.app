@@ -3,840 +3,617 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Quillory — Voice journaling, simplified</title>
+  <title>Quillory — Calm voice journaling</title>
   <meta name="description" content="A calm voice-journaling app that turns your day into a clean summary." />
 
-  <link rel="icon" href="/assets/favicon.png" />
-  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <link rel="icon" href="/assets/icon.png" />
+  <link rel="apple-touch-icon" href="/assets/icon.png" />
 
   <meta property="og:title" content="Quillory" />
-  <meta property="og:description" content="Voice journaling, simplified." />
+  <meta property="og:description" content="Calm voice journaling, simplified." />
   <meta property="og:image" content="/assets/og.png" />
   <meta property="og:type" content="website" />
 
   <style>
     :root{
-      --bg:#fbfaf7;
-      --bg2:#f6f1e8;
-      --card:rgba(255,255,255,.78);
-      --card2:rgba(255,255,255,.92);
+      --bg:#f6f1e8;
+      --card:#ffffff;
       --text:#121212;
-      --muted:rgba(0,0,0,.60);
+      --muted:rgba(0,0,0,.58);
       --border:rgba(0,0,0,.10);
-      --hair:rgba(0,0,0,.06);
+
+      /* Your brand green */
       --green:#2f6e55;
-      --green2:#3a8364;
-      --shadow:0 18px 70px rgba(0,0,0,.10);
-      --shadow2:0 12px 30px rgba(0,0,0,.08);
+      --green2:#3a7a60;
+
+      --shadow:0 18px 60px rgba(0,0,0,.10);
+      --shadowSoft:0 12px 34px rgba(0,0,0,.08);
+
       --radius:22px;
-      --radius2:28px;
-      --max:1120px;
-      --ease:cubic-bezier(.2,.8,.2,1);
+
+      --max:1100px;
+      --pad:24px;
     }
 
     *{box-sizing:border-box}
-    html,body{height:100%}
+    html{scroll-behavior:smooth}
     body{
       margin:0;
       font-family:-apple-system,BlinkMacSystemFont,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
       color:var(--text);
-      background:
-        radial-gradient(1100px 700px at 12% -10%, rgba(47,110,85,.12), transparent 55%),
-        radial-gradient(900px 650px at 100% 0%, rgba(47,110,85,.08), transparent 52%),
-        linear-gradient(180deg,var(--bg),var(--bg2));
       overflow-x:hidden;
     }
-
     a{color:inherit;text-decoration:none}
-    a:hover{text-decoration:none}
-    .wrap{max-width:var(--max);margin:0 auto;padding:28px 22px 80px}
+    a:hover{opacity:.85}
 
-    /* ambient glow */
-    .glow{
-      position:fixed; inset:-30%;
-      pointer-events:none;
-      background:
-        radial-gradient(560px 420px at 18% 10%, rgba(47,110,85,.14), transparent 60%),
-        radial-gradient(620px 520px at 86% 18%, rgba(47,110,85,.10), transparent 60%),
-        radial-gradient(520px 420px at 55% 90%, rgba(47,110,85,.07), transparent 60%);
-      filter: blur(8px);
-      opacity:.9;
-      z-index:-2;
-      animation: drift 18s var(--ease) infinite;
-      transform: translate3d(0,0,0);
+    /* ---------- Top nav ---------- */
+    .navWrap{
+      position:fixed; left:0; right:0; top:0;
+      z-index:50;
+      backdrop-filter:saturate(160%) blur(10px);
+      background:rgba(246,241,232,.65);
+      border-bottom:1px solid rgba(0,0,0,.06);
     }
-    @keyframes drift{
-      0%{transform:translate3d(0,0,0) scale(1)}
-      50%{transform:translate3d(-1.4%, .9%, 0) scale(1.02)}
-      100%{transform:translate3d(0,0,0) scale(1)}
-    }
-
-    /* top nav */
-    header{
-      position:sticky; top:0; z-index:60;
-      backdrop-filter:saturate(180%) blur(14px);
-      -webkit-backdrop-filter:saturate(180%) blur(14px);
-      background:linear-gradient(180deg, rgba(251,250,247,.80), rgba(251,250,247,.45));
-      border-bottom:1px solid var(--hair);
-    }
-    .navInner{
+    .nav{
       max-width:var(--max);
       margin:0 auto;
-      padding:14px 22px;
+      padding:14px var(--pad);
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:14px;
+      gap:16px;
     }
     .brand{
-      display:flex;align-items:center;gap:12px;
-      min-width:240px;
+      display:flex; align-items:center; gap:12px;
+      font-weight:800; letter-spacing:-.3px;
     }
-    .logo{
-      width:42px;height:42px;border-radius:14px;
+    .brand img{
+      width:34px; height:34px; border-radius:12px;
       border:1px solid var(--border);
-      box-shadow:0 10px 26px rgba(0,0,0,.10);
-      background:#fff;object-fit:cover;
+      box-shadow:0 10px 24px rgba(0,0,0,.10);
+      object-fit:cover;
+      background:#fff;
     }
-    .brandWord{
-      font-weight:900;letter-spacing:-.5px;font-size:18px;
-      display:flex;align-items:center;gap:10px;
+    .navLinks{
+      display:flex; gap:14px; align-items:center;
+      color:var(--muted); font-size:14px;
     }
-    .badge{
-      font-size:12px;font-weight:800;
-      color:rgba(0,0,0,.58);
-      padding:6px 10px;border-radius:999px;
-      background:rgba(255,255,255,.65);
+    .pill{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:10px 14px;
+      border-radius:999px;
       border:1px solid rgba(0,0,0,.10);
-      white-space:nowrap;
+      background:rgba(255,255,255,.65);
+      box-shadow:0 10px 22px rgba(0,0,0,.06);
+      font-weight:700;
+      color:rgba(0,0,0,.78);
     }
-
-    .navLinks{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-    .navLinks a{
-      font-size:14px;
-      color:rgba(0,0,0,.62);
-      padding:8px 10px;border-radius:999px;
-      transition: background .18s var(--ease), color .18s var(--ease), transform .18s var(--ease);
-    }
-    .navLinks a:hover{background:rgba(0,0,0,.05);color:rgba(0,0,0,.88);transform:translateY(-1px)}
-
-    .navCta{
-      display:flex;align-items:center;gap:10px;
-    }
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      padding:10px 14px;border-radius:999px;
-      border:1px solid rgba(0,0,0,.12);
-      background:rgba(255,255,255,.82);
-      box-shadow:0 10px 24px rgba(0,0,0,.06);
-      font-weight:900;font-size:13px;
-      transition: transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
-      cursor:pointer;
-    }
-    .btn:hover{transform:translateY(-1px);box-shadow:0 14px 30px rgba(0,0,0,.10)}
-    .btnPrimary{
-      border-color:transparent;
+    .pillPrimary{
+      background:linear-gradient(180deg, var(--green2), var(--green));
       color:#fff;
-      background:linear-gradient(180deg,var(--green2),var(--green));
-      box-shadow:0 18px 34px rgba(47,110,85,.22);
+      border-color:transparent;
+      box-shadow:0 16px 30px rgba(47,110,85,.25);
     }
-    .btnPrimary:hover{box-shadow:0 22px 44px rgba(47,110,85,.26)}
 
-    /* hero layout */
-    .hero{
-      padding:34px 0 22px;
+    /* ---------- Sections ---------- */
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 var(--pad);}
+    .section{
+      min-height:100svh;
+      display:flex;
+      align-items:center;
+      padding:96px 0 72px;
+      position:relative;
+    }
+    .grid{
+      width:100%;
       display:grid;
       grid-template-columns: 1.05fr .95fr;
-      gap:18px;
+      gap:24px;
       align-items:center;
     }
-    @media (max-width:980px){
-      .hero{grid-template-columns:1fr;gap:18px}
-      .brand{min-width:unset}
+    @media (max-width: 920px){
+      .grid{grid-template-columns:1fr; gap:18px;}
     }
 
     .kicker{
-      display:inline-flex;align-items:center;gap:10px;
-      color:rgba(0,0,0,.62);
-      font-weight:800;
+      display:inline-flex; align-items:center; gap:10px;
       font-size:13px;
-      letter-spacing:-.1px;
-      margin-bottom:10px;
+      color:rgba(0,0,0,.65);
+      border:1px solid rgba(0,0,0,.10);
+      background:rgba(255,255,255,.55);
+      padding:10px 12px;
+      border-radius:999px;
+      box-shadow:0 10px 22px rgba(0,0,0,.06);
     }
     .dot{
-      width:8px;height:8px;border-radius:999px;
+      width:8px; height:8px; border-radius:99px;
       background:var(--green);
-      box-shadow:0 0 0 6px rgba(47,110,85,.12);
+      box-shadow:0 0 0 6px rgba(47,110,85,.16);
     }
 
-    .h1{
+    h1{
+      font-size:52px;
+      line-height:1.05;
+      letter-spacing:-1.2px;
+      margin:14px 0 12px;
+    }
+    h2{
+      font-size:34px;
+      line-height:1.12;
+      letter-spacing:-.8px;
+      margin:0 0 12px;
+    }
+    p{
       margin:0;
-      font-size:56px;
-      line-height:1.03;
-      letter-spacing:-1.4px;
-    }
-    @media (max-width:520px){.h1{font-size:42px}}
-    .sub{
-      margin:14px 0 18px;
       color:var(--muted);
+      line-height:1.7;
       font-size:16px;
-      line-height:1.75;
-      max-width:60ch;
     }
 
-    .ctaRow{display:flex;gap:12px;flex-wrap:wrap}
-    .hint{
-      margin-top:12px;
+    .ctaRow{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px;}
+    .mutedLine{margin-top:10px; color:rgba(0,0,0,.58); font-size:13px;}
+    .mutedLine a{color:var(--green); font-weight:700;}
+
+    /* ---------- Cards / UI blocks ---------- */
+    .card{
+      background:rgba(255,255,255,.72);
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .cardTitle{
+      font-weight:900;
+      letter-spacing:-.2px;
+      margin:0 0 8px;
+    }
+    .list{
+      margin:0;
+      padding:0;
+      list-style:none;
+      color:rgba(0,0,0,.62);
+      line-height:1.7;
+      font-size:14px;
+    }
+    .list li{margin:4px 0}
+    .list b{color:rgba(0,0,0,.80)}
+
+    /* ---------- Phone mockup stack ---------- */
+    .phoneStage{
+      position:relative;
+      height:560px;
+      border-radius:28px;
+    }
+    @media (max-width: 920px){
+      .phoneStage{height:520px;}
+    }
+
+    .glow{
+      position:absolute;
+      inset:-10%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(47,110,85,.24), transparent 55%),
+        radial-gradient(circle at 70% 55%, rgba(47,110,85,.16), transparent 55%),
+        radial-gradient(circle at 45% 80%, rgba(0,0,0,.08), transparent 60%);
+      filter: blur(22px);
+      opacity:.85;
+      pointer-events:none;
+      transform:translate3d(0,0,0);
+    }
+
+    .phone{
+      position:absolute;
+      width:min(320px, 82vw);
+      aspect-ratio: 9 / 19.5;
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid rgba(0,0,0,.14);
+      box-shadow:var(--shadowSoft);
+      background:#fff;
+      transform-origin:center;
+      will-change:transform, opacity;
+    }
+    .phone img{width:100%; height:100%; object-fit:cover; display:block;}
+
+    .p1{left:50%; top:22px; transform:translateX(-54%) rotate(-6deg) scale(.98); opacity:.92;}
+    .p2{left:50%; top:44px; transform:translateX(-36%) rotate(4deg) scale(1.02); opacity:.96;}
+    .p3{left:50%; top:10px; transform:translateX(-46%) rotate(0deg) scale(1.06); opacity:1;}
+
+    /* ---------- Intro splash (Page 1) ---------- */
+    .splash{
+      text-align:center;
+      width:100%;
+      padding-top:22px;
+    }
+    .splashMark{
+      width:112px; height:112px;
+      border-radius:28px;
+      border:1px solid rgba(0,0,0,.10);
+      background:rgba(255,255,255,.70);
+      box-shadow:0 18px 60px rgba(0,0,0,.10);
+      display:grid;
+      place-items:center;
+      margin:0 auto 16px;
+      position:relative;
+      overflow:hidden;
+    }
+    .splashMark::before{
+      content:"";
+      position:absolute;
+      inset:-60%;
+      background:radial-gradient(circle at 30% 35%, rgba(47,110,85,.26), transparent 60%);
+      filter:blur(18px);
+      animation: drift 6.5s ease-in-out infinite;
+      opacity:.9;
+    }
+    @keyframes drift{
+      0%,100%{transform:translate(-10px,-8px) rotate(0deg)}
+      50%{transform:translate(10px,8px) rotate(10deg)}
+    }
+    .splashMark img{
+      width:56px; height:56px;
+      opacity:.95;
+      transform:translateZ(0);
+      filter: drop-shadow(0 14px 20px rgba(0,0,0,.10));
+      animation: breathe 3.6s ease-in-out infinite;
+    }
+    @keyframes breathe{
+      0%,100%{transform:scale(1)}
+      50%{transform:scale(1.06)}
+    }
+
+    .splashTitle{
+      font-size:54px;
+      letter-spacing:-1.4px;
+      margin:10px 0 10px;
+      font-weight:900;
+    }
+    .splashSub{
+      max-width:720px;
+      margin:0 auto;
+      color:rgba(0,0,0,.58);
+      font-size:16px;
+      line-height:1.8;
+    }
+
+    .scrollHint{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      margin-top:26px;
       color:rgba(0,0,0,.55);
       font-size:13px;
-    }
-    .hint a{color:var(--green);font-weight:800}
-
-    /* hero animation: Quillory pop */
-    .popTitle{
-      display:inline-block;
-      transform: translateY(10px);
-      opacity:0;
-      filter: blur(6px);
-      animation: popIn .9s var(--ease) forwards;
-    }
-    @keyframes popIn{
-      to { transform:translateY(0); opacity:1; filter:blur(0) }
-    }
-
-    /* phone mock */
-    .phoneWrap{
-      position:relative;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      min-height:520px;
-    }
-    @media (max-width:980px){
-      .phoneWrap{min-height:480px}
-    }
-    .phone{
-      width:min(360px, 88vw);
-      aspect-ratio: 9 / 19.5;
-      border-radius:42px;
-      position:relative;
-      background:rgba(255,255,255,.72);
-      border:1px solid rgba(0,0,0,.12);
-      box-shadow: 0 30px 90px rgba(0,0,0,.18);
-      overflow:hidden;
-      transform: translate3d(0, 0, 0);
-      animation: floaty 6.5s var(--ease) infinite;
-      will-change: transform;
-    }
-    @keyframes floaty{
-      0%{transform:translate3d(0,0,0)}
-      50%{transform:translate3d(0,-10px,0)}
-      100%{transform:translate3d(0,0,0)}
-    }
-    .phone:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(420px 260px at 20% 0%, rgba(47,110,85,.16), transparent 60%),
-        radial-gradient(420px 300px at 90% 12%, rgba(47,110,85,.10), transparent 60%);
-      opacity:.55;
-      pointer-events:none;
-      z-index:2;
-    }
-    .phoneTop{
-      position:absolute; top:14px; left:50%;
-      transform:translateX(-50%);
-      width:42%; height:18px;
+      padding:10px 14px;
       border-radius:999px;
-      background:rgba(0,0,0,.10);
-      z-index:4;
-    }
-
-    .screenStack{
-      position:absolute; inset:0;
-      padding:14px;
-      z-index:1;
-    }
-    .screenCard{
-      position:absolute; inset:14px;
-      border-radius:34px;
-      overflow:hidden;
       border:1px solid rgba(0,0,0,.10);
-      background:#fff;
-      box-shadow:0 14px 26px rgba(0,0,0,.10);
-      transform: translate3d(0,0,0);
+      background:rgba(255,255,255,.55);
+      box-shadow:0 10px 22px rgba(0,0,0,.06);
     }
-    .screenCard img{
-      width:100%; height:100%;
-      object-fit:cover;
-      display:block;
+    .chev{
+      width:8px; height:8px;
+      border-right:2px solid rgba(0,0,0,.45);
+      border-bottom:2px solid rgba(0,0,0,.45);
+      transform:rotate(45deg);
+      animation:bob 1.8s ease-in-out infinite;
     }
-
-    /* crossfade stack */
-    .screenCard.one{opacity:1}
-    .screenCard.two{opacity:0}
-    .screenCard.three{opacity:0}
-    .screenCard.one{animation: fadeA 12s infinite}
-    .screenCard.two{animation: fadeB 12s infinite}
-    .screenCard.three{animation: fadeC 12s infinite}
-
-    @keyframes fadeA{
-      0%, 26%{opacity:1}
-      33%, 93%{opacity:0}
-      100%{opacity:1}
-    }
-    @keyframes fadeB{
-      0%, 30%{opacity:0}
-      38%, 60%{opacity:1}
-      68%, 100%{opacity:0}
-    }
-    @keyframes fadeC{
-      0%, 62%{opacity:0}
-      70%, 92%{opacity:1}
-      100%{opacity:0}
+    @keyframes bob{
+      0%,100%{transform:translateY(0) rotate(45deg)}
+      50%{transform:translateY(4px) rotate(45deg)}
     }
 
-    /* mic halo (subtle) */
-    .halo{
-      position:absolute;
-      width:420px;height:420px;
+    /* ---------- Tone chips (Page 3) ---------- */
+    .chips{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .chip{
+      padding:10px 14px;
       border-radius:999px;
-      background: radial-gradient(circle at center, rgba(47,110,85,.18), transparent 62%);
-      filter: blur(2px);
-      opacity:.9;
-      z-index:-1;
-      animation: pulse 3.8s var(--ease) infinite;
+      border:1px solid rgba(0,0,0,.10);
+      background:rgba(255,255,255,.58);
+      font-weight:800;
+      color:rgba(0,0,0,.72);
+      box-shadow:0 10px 22px rgba(0,0,0,.06);
+      transform:translateY(0);
+      transition:transform .25s ease, box-shadow .25s ease;
     }
-    @keyframes pulse{
-      0%{transform:scale(.96);opacity:.65}
-      50%{transform:scale(1.02);opacity:.92}
-      100%{transform:scale(.96);opacity:.65}
+    .chipActive{
+      background:rgba(47,110,85,.16);
+      border-color:rgba(47,110,85,.25);
+      color:rgba(0,0,0,.78);
     }
+    .chip:hover{transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,0,0,.08);}
 
-    /* section blocks */
-    .section{
-      margin-top:24px;
-      padding-top:22px;
-      border-top:1px solid var(--hair);
+    /* ---------- Footer ---------- */
+    footer{
+      padding:28px 0 34px;
+      border-top:1px solid rgba(0,0,0,.08);
+      color:rgba(0,0,0,.58);
+      font-size:13px;
     }
-    .sectionTitle{
-      font-size:18px;
-      margin:0 0 8px;
-      letter-spacing:-.2px;
-      font-weight:900;
-    }
-    .sectionSub{
-      margin:0 0 14px;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.7;
-      max-width:72ch;
-    }
-
-    .tri{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:12px;
-    }
-    @media (max-width:980px){.tri{grid-template-columns:1fr}}
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius2);
-      box-shadow:var(--shadow2);
-      padding:16px;
-      position:relative;
-      overflow:hidden;
-    }
-    .cardStrong{background:var(--card2)}
-    .card h3{
-      margin:0 0 6px;
-      font-size:14px;
-      letter-spacing:-.1px;
-      font-weight:900;
-      display:flex;align-items:center;gap:10px;
-    }
-    .iconDot{
-      width:10px;height:10px;border-radius:999px;
-      background:var(--green);
-      box-shadow:0 0 0 6px rgba(47,110,85,.12);
-      flex:0 0 auto;
-    }
-    .card p{
-      margin:0;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.65;
-    }
-
-    /* screenshot gallery */
-    .galleryTop{
+    .foot{
       display:flex;
-      align-items:flex-end;
+      align-items:center;
       justify-content:space-between;
       gap:12px;
       flex-wrap:wrap;
-      margin-top:16px;
-      margin-bottom:10px;
     }
-    .galleryHint{color:var(--muted);font-size:13px}
+    .foot a{color:var(--green); font-weight:800;}
 
-    .spotlight{
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap:12px;
-      align-items:stretch;
-    }
-    @media (max-width:980px){.spotlight{grid-template-columns:1fr}}
-
-    .shot{
-      border-radius:18px;
-      border:1px solid rgba(0,0,0,.12);
-      background:rgba(255,255,255,.9);
-      overflow:hidden;
-      display:block;
-      box-shadow:var(--shadow2);
-      transition: transform .18s var(--ease), box-shadow .18s var(--ease), border-color .18s var(--ease);
-      position:relative;
-      cursor:pointer;
-    }
-    .shot:hover{
-      transform:translateY(-2px);
-      box-shadow:0 18px 44px rgba(0,0,0,.14);
-      border-color:rgba(47,110,85,.24);
-    }
-    .shot img{width:100%;height:100%;object-fit:cover;display:block}
-
-    .shotTall{aspect-ratio:9/19.5}
-    .shotWide{aspect-ratio:16/10}
-
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:12px;
-      margin-top:12px;
-    }
-    @media (max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:520px){.grid{grid-template-columns:1fr}}
-
-    /* FAQ */
-    .faq{
-      display:grid;
-      grid-template-columns:1.1fr .9fr;
-      gap:12px;
-      align-items:start;
-      margin-top:12px;
-    }
-    @media (max-width:980px){.faq{grid-template-columns:1fr}}
-    details{
-      border:1px solid var(--border);
-      background:var(--card2);
-      border-radius:18px;
-      padding:14px 14px;
-      box-shadow:0 10px 22px rgba(0,0,0,.06);
-    }
-    details + details{margin-top:10px}
-    summary{
-      cursor:pointer;
-      font-weight:900;
-      letter-spacing:-.2px;
-      list-style:none;
-      display:flex;align-items:center;justify-content:space-between;gap:10px;
-    }
-    summary::-webkit-details-marker{display:none}
-    .chev{
-      width:26px;height:26px;border-radius:999px;
-      display:inline-flex;align-items:center;justify-content:center;
-      background:rgba(0,0,0,.05);
-      border:1px solid rgba(0,0,0,.08);
-      flex:0 0 auto;
-      transition: transform .18s var(--ease);
-    }
-    details[open] .chev{transform:rotate(180deg)}
-    details p{margin:10px 0 0;color:var(--muted);font-size:14px;line-height:1.65}
-
-    /* footer */
-    footer{
-      margin-top:26px;
-      padding-top:16px;
-      border-top:1px solid var(--hair);
-      display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
-      color:rgba(0,0,0,.55);font-size:13px;
-    }
-    footer a{color:rgba(0,0,0,.60);font-weight:800}
-    footer a:hover{color:rgba(0,0,0,.86)}
-
-    /* lightbox */
-    .lightbox{
-      position:fixed; inset:0;
-      background:rgba(0,0,0,.80);
-      display:none;
-      align-items:center;justify-content:center;
-      padding:22px;
-      z-index:9999;
-    }
-    .lightbox.open{display:flex}
-    .lbInner{
-      position:relative;
-      max-width:min(620px, 94vw);
-      max-height:92vh;
-    }
-    .lbImg{
-      width:100%;
-      max-height:92vh;
-      height:auto;
-      border-radius:22px;
-      display:block;
-      box-shadow:0 30px 90px rgba(0,0,0,.50);
-      background:#111;
-    }
-    .lbTop{
-      position:absolute;
-      top:-52px; left:0; right:0;
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px;
-    }
-    .lbBtn{
-      background:rgba(255,255,255,.12);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.22);
-      border-radius:999px;
-      padding:10px 12px;
-      font-weight:900;
-      cursor:pointer;
-      transition: transform .18s var(--ease), background .18s var(--ease);
-    }
-    .lbBtn:hover{transform:translateY(-1px);background:rgba(255,255,255,.16)}
-    .lbCaption{
-      color:rgba(255,255,255,.75);
-      font-size:13px;
-      font-weight:800;
-      padding:10px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(0,0,0,.18);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width:52vw;
-    }
-
-    /* reveal on scroll */
+    /* ---------- Reveal animations ---------- */
     .reveal{
       opacity:0;
-      transform: translateY(14px);
-      transition: opacity .75s var(--ease), transform .75s var(--ease);
-      will-change: opacity, transform;
+      transform:translateY(16px);
+      transition:opacity .8s ease, transform .8s ease;
+      will-change:opacity, transform;
     }
-    .reveal.in{
+    .reveal.show{
       opacity:1;
-      transform: translateY(0);
+      transform:translateY(0);
     }
-    .d1{transition-delay:.06s}
-    .d2{transition-delay:.12s}
-    .d3{transition-delay:.18s}
-    .d4{transition-delay:.24s}
 
-    /* reduced motion */
-    @media (prefers-reduced-motion: reduce){
-      .glow{animation:none}
-      .phone{animation:none}
-      .screenCard{animation:none}
-      .halo{animation:none}
-      .btn,.shot,.navLinks a{transition:none}
-      .reveal{transition:none;opacity:1;transform:none}
-      .popTitle{animation:none;opacity:1;transform:none;filter:none}
+    /* Slight parallax helper */
+    .parallax{
+      transform:translateY(0);
+      transition:transform .1s linear;
+      will-change:transform;
     }
   </style>
 </head>
 
 <body>
-  <div class="glow" aria-hidden="true"></div>
-
-  <header>
-    <div class="navInner">
+  <!-- NAV -->
+  <div class="navWrap">
+    <div class="nav">
       <div class="brand">
-        <img class="logo" src="/assets/icon.png" alt="Quillory icon" />
-        <div class="brandWord">
-          Quillory
-          <span class="badge">Calm • Private • Fast</span>
-        </div>
+        <img src="/assets/icon.png" alt="Quillory icon" />
+        <span>Quillory</span>
       </div>
-
       <div class="navLinks">
-        <a href="#screens">Screens</a>
-        <a href="#privacy">Privacy</a>
-        <a href="/support/">Support</a>
-        <a href="/privacy/">Privacy Policy</a>
-        <a href="/terms/">Terms</a>
+        <a href="#how" class="pill">How it works</a>
+        <a href="#privacy" class="pill">Privacy</a>
+        <a href="/support/" class="pill">Support</a>
+        <a href="#" class="pill pillPrimary">Download</a>
       </div>
-
-      <div class="navCta">
-        <a class="btn" href="mailto:support@quillory.app">Email</a>
-        <a class="btn btnPrimary" href="#" aria-label="Download Quillory">Download</a>
-      </div>
-    </div>
-  </header>
-
-  <main class="wrap">
-    <section class="hero">
-      <div class="reveal in">
-        <div class="kicker">
-          <span class="dot" aria-hidden="true"></span>
-          Built for the quiet habit that changes your life.
-        </div>
-
-        <h1 class="h1">
-          <span class="popTitle">Voice journaling,<br/>simplified.</span>
-        </h1>
-
-        <p class="sub">
-          Record your thoughts through the day. Quillory turns them into one clean end-of-day summary —
-          calm, private, and effortless.
-        </p>
-
-        <div class="ctaRow">
-          <a class="btn btnPrimary" href="#" aria-label="Download Quillory">Download</a>
-          <a class="btn" href="#screens">See screens</a>
-          <a class="btn" href="/support/">Contact support</a>
-        </div>
-
-        <div class="hint">
-          Support: <a href="mailto:support@quillory.app">support@quillory.app</a>
-        </div>
-      </div>
-
-      <div class="phoneWrap reveal d2">
-        <div class="halo" aria-hidden="true"></div>
-
-        <div class="phone" id="phone">
-          <div class="phoneTop" aria-hidden="true"></div>
-
-          <div class="screenStack">
-            <!-- Use 3 strongest screens in the hero rotation -->
-            <div class="screenCard one"><img src="/assets/screens/01.png" alt="Quillory screen 1" /></div>
-            <div class="screenCard two"><img src="/assets/screens/02.png" alt="Quillory screen 2" /></div>
-            <div class="screenCard three"><img src="/assets/screens/03.png" alt="Quillory screen 3" /></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section reveal d1" id="privacy">
-      <h2 class="sectionTitle">Quiet luxury UX, built around trust</h2>
-      <p class="sectionSub">
-        Quillory is designed to feel calm and premium — with privacy-first defaults and zero “attention hacks”.
-      </p>
-
-      <div class="tri">
-        <div class="card cardStrong">
-          <h3><span class="iconDot"></span> Minimal friction</h3>
-          <p>Open. Tap. Talk. Done. No complicated setup, no clutter, no noise.</p>
-        </div>
-        <div class="card cardStrong">
-          <h3><span class="iconDot"></span> Private by default</h3>
-          <p>Your content is treated like it matters. No ads, no selling personal data, and you can delete anytime.</p>
-        </div>
-        <div class="card cardStrong">
-          <h3><span class="iconDot"></span> Clean summaries</h3>
-          <p>One paragraph that captures the day — in your tone (nice, balanced, or yourself).</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section reveal d2" id="screens">
-      <div class="galleryTop">
-        <div>
-          <h2 class="sectionTitle" style="margin-bottom:4px;">Screenshots</h2>
-          <p class="sectionSub" style="margin:0;">Tap any screen to zoom. This is the exact product experience.</p>
-        </div>
-        <div class="galleryHint">Premium motion. Minimal noise.</div>
-      </div>
-
-      <!-- Spotlight row -->
-      <div class="spotlight">
-        <a class="shot shotWide" href="/assets/screens/01.png" data-caption="Home — mic + calm journaling">
-          <img src="/assets/screens/01.png" alt="Quillory screenshot 1">
-        </a>
-        <a class="shot shotTall" href="/assets/screens/02.png" data-caption="Today — summary + recordings">
-          <img src="/assets/screens/02.png" alt="Quillory screenshot 2">
-        </a>
-      </div>
-
-      <!-- Full grid -->
-      <div class="grid" id="shots">
-        <a class="shot shotTall" href="/assets/screens/03.png" data-caption="Memories — list + playback"><img src="/assets/screens/03.png" alt="Quillory screenshot 3"></a>
-        <a class="shot shotTall" href="/assets/screens/04.png" data-caption="Settings — preferences"><img src="/assets/screens/04.png" alt="Quillory screenshot 4"></a>
-        <a class="shot shotTall" href="/assets/screens/05.png" data-caption="More screens"><img src="/assets/screens/05.png" alt="Quillory screenshot 5"></a>
-        <a class="shot shotTall" href="/assets/screens/06.png" data-caption="More screens"><img src="/assets/screens/06.png" alt="Quillory screenshot 6"></a>
-      </div>
-    </section>
-
-    <section class="section reveal d3">
-      <h2 class="sectionTitle">FAQ</h2>
-      <p class="sectionSub">Short answers, no marketing fluff.</p>
-
-      <div class="faq">
-        <div>
-          <details open>
-            <summary>
-              Is Quillory private?
-              <span class="chev">⌄</span>
-            </summary>
-            <p>Yes — the experience is designed around privacy-first defaults. You control what you record and you can delete recordings anytime.</p>
-          </details>
-
-          <details>
-            <summary>
-              What does “tone” do?
-              <span class="chev">⌄</span>
-            </summary>
-            <p>You can generate your end-of-day summary in a gentler tone, a balanced tone, or your raw authentic voice.</p>
-          </details>
-
-          <details>
-            <summary>
-              Can I contact support?
-              <span class="chev">⌄</span>
-            </summary>
-            <p>Yes — email <a href="mailto:support@quillory.app" style="color:var(--green);font-weight:900;">support@quillory.app</a>.</p>
-          </details>
-        </div>
-
-        <div class="card cardStrong">
-          <h3 style="margin:0 0 6px;font-size:14px;font-weight:900;">Want a more premium hero?</h3>
-          <p style="margin:0;color:var(--muted);font-size:14px;line-height:1.65;">
-            If you send me a 8–12 second screen recording of the app (MP4), I’ll add it as a sleek hero “product film”
-            inside the phone frame with scroll-synced motion.
-          </p>
-          <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
-            <a class="btn" href="/support/">Support page</a>
-            <a class="btn btnPrimary" href="mailto:support@quillory.app">Email support</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer class="reveal d4">
-      <div>© <span id="y"></span> Quillory</div>
-      <div>
-        <a href="/privacy/">Privacy</a> ·
-        <a href="/terms/">Terms</a> ·
-        <a href="/support/">Support</a>
-      </div>
-    </footer>
-  </main>
-
-  <!-- Lightbox -->
-  <div class="lightbox" id="lb" role="dialog" aria-modal="true" aria-label="Screenshot preview">
-    <div class="lbInner">
-      <div class="lbTop">
-        <button class="lbBtn" id="lbClose">Close</button>
-        <div class="lbCaption" id="lbCap">Preview</div>
-        <button class="lbBtn" id="lbNext">Next</button>
-      </div>
-      <img class="lbImg" id="lbImg" alt="Screenshot preview" />
     </div>
   </div>
+
+  <!-- PAGE 1: SPLASH -->
+  <section class="section" id="top">
+    <div class="wrap">
+      <div class="splash reveal">
+        <div class="splashMark" aria-hidden="true">
+          <img src="/assets/icon.png" alt="" />
+        </div>
+        <div class="splashTitle">Quillory</div>
+        <div class="splashSub">
+          A calm, private way to capture your day — in your own voice.<br/>
+          Record anytime. Generate a clean end-of-day summary when you’re ready.
+        </div>
+
+        <div class="ctaRow" style="justify-content:center;">
+          <a class="pill pillPrimary" href="#" aria-label="Download Quillory">Download</a>
+          <a class="pill" href="#how">See how it works</a>
+        </div>
+
+        <div class="mutedLine">
+          Support: <a href="mailto:support@quillory.app">support@quillory.app</a>
+        </div>
+
+        <a class="scrollHint" href="#how" aria-label="Scroll to next section">
+          Scroll <span class="chev"></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 2: HERO / NO FRICTION -->
+  <section class="section" id="how">
+    <div class="wrap">
+      <div class="grid">
+        <div class="reveal">
+          <div class="kicker"><span class="dot"></span> No friction. Just record.</div>
+          <h1>Tap once.<br/>Talk naturally.</h1>
+          <p>
+            Quillory is built for momentum: open the app, record a voice memory, and move on.
+            Your day stays organized without a complicated workflow.
+          </p>
+
+          <div class="ctaRow">
+            <a class="pill pillPrimary" href="#">Download</a>
+            <a class="pill" href="/support/">Contact support</a>
+          </div>
+
+          <div style="margin-top:16px" class="card">
+            <div class="cardTitle">What you get</div>
+            <ul class="list">
+              <li>• <b>Fast capture</b> — one-tap voice memories</li>
+              <li>• <b>End-of-day summary</b> — one clean paragraph</li>
+              <li>• <b>Optional playback</b> — revisit important moments</li>
+              <li>• <b>Delete anytime</b> — your content stays yours</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="phoneStage reveal">
+          <div class="glow parallax" data-parallax="0.10"></div>
+
+          <!-- Use your real screenshots -->
+          <div class="phone p1 parallax" data-parallax="0.22">
+            <img src="/assets/screens/01.png" alt="Quillory home screen screenshot">
+          </div>
+          <div class="phone p2 parallax" data-parallax="0.18">
+            <img src="/assets/screens/02.png" alt="Quillory summary screen screenshot">
+          </div>
+          <div class="phone p3 parallax" data-parallax="0.14">
+            <img src="/assets/screens/03.png" alt="Quillory memories screen screenshot">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 3: SUMMARY + TONE -->
+  <section class="section" id="summary">
+    <div class="wrap">
+      <div class="grid">
+        <div class="reveal">
+          <div class="kicker"><span class="dot"></span> A cleaner way to remember</div>
+          <h2>From voice… to a clean daily memory.</h2>
+          <p>
+            When you choose to generate a summary, Quillory turns your recordings into a readable snapshot of the day.
+            You stay in control of the tone.
+          </p>
+
+          <div class="chips" aria-label="Summary tone options">
+            <div class="chip">Nice</div>
+            <div class="chip">Balanced</div>
+            <div class="chip chipActive">Yourself</div>
+          </div>
+
+          <div style="margin-top:14px" class="card">
+            <div class="cardTitle">Designed to feel calm</div>
+            <ul class="list">
+              <li>• Soft layout, clear hierarchy</li>
+              <li>• No clutter, no “busy” dashboards</li>
+              <li>• Built for daily consistency</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="card">
+            <div class="cardTitle">Example output</div>
+            <p style="margin-top:10px">
+              “Today, I recorded some thoughts and made a few changes to Quillory.
+              The app is getting cleaner day by day. I stayed consistent — and that’s the win.”
+            </p>
+
+            <div style="height:12px"></div>
+
+            <div style="
+              padding:14px;
+              border-radius:16px;
+              border:1px solid rgba(0,0,0,.10);
+              background:rgba(47,110,85,.08);
+              color:rgba(0,0,0,.72);
+              font-weight:800;
+            ">
+              Generate End-of-Day Summary
+            </div>
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="card" style="background:rgba(255,255,255,.64)">
+            <div class="cardTitle">No risky promises</div>
+            <p>
+              We keep the copy honest: “private by default” and “you control your content” —
+              without claiming things that could create legal trouble.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 4: PRIVACY / SAFETY -->
+  <section class="section" id="privacy">
+    <div class="wrap">
+      <div class="grid">
+        <div class="reveal">
+          <div class="kicker"><span class="dot"></span> Privacy-first posture</div>
+          <h2>Your memories are yours.</h2>
+          <p>
+            Quillory is built to respect your content. You can delete your recordings and summaries,
+            and we don’t sell your personal data.
+          </p>
+
+          <div class="ctaRow">
+            <a class="pill" href="/privacy/">Privacy policy</a>
+            <a class="pill" href="/terms/">Terms</a>
+            <a class="pill" href="/support/">Support</a>
+          </div>
+
+          <div style="margin-top:14px" class="card">
+            <div class="cardTitle">What we say (and mean)</div>
+            <ul class="list">
+              <li>• No ads</li>
+              <li>• No selling your data</li>
+              <li>• Clear controls (delete anytime)</li>
+              <li>• We only use data to run and improve the service</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="card">
+            <div class="cardTitle">Simple, human support</div>
+            <p>
+              Need help? Email us and we’ll respond.
+            </p>
+            <div style="height:12px"></div>
+            <a class="pill pillPrimary" href="mailto:support@quillory.app">Email support@quillory.app</a>
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="card">
+            <div class="cardTitle">Press / influencers</div>
+            <p>
+              If you’re reviewing Quillory, reach out — we can provide assets and a short demo walkthrough.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="foot">
+          <div>© <span id="y"></span> Quillory</div>
+          <div>
+            <a href="/privacy/">Privacy</a> ·
+            <a href="/terms/">Terms</a> ·
+            <a href="/support/">Support</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </section>
 
   <script>
     // Year
     document.getElementById('y').textContent = new Date().getFullYear();
 
     // Reveal on scroll
-    const els = document.querySelectorAll('.reveal');
-    els.forEach(el => el.classList.remove('in')); // start hidden
     const io = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in');
-          io.unobserve(entry.target);
-        }
+      for (const e of entries) {
+        if (e.isIntersecting) e.target.classList.add('show');
       }
     }, { threshold: 0.12 });
-    els.forEach(el => io.observe(el));
 
-    // Smooth in-page navigation
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click', (e)=>{
-        const href = a.getAttribute('href');
-        if (!href || href === '#') return;
-        const target = document.querySelector(href);
-        if (!target) return;
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-    // Lightbox with next
-    const lb = document.getElementById('lb');
-    const lbImg = document.getElementById('lbImg');
-    const lbCap = document.getElementById('lbCap');
-    const close = document.getElementById('lbClose');
-    const next = document.getElementById('lbNext');
-
-    const shotLinks = Array.from(document.querySelectorAll('a.shot'));
-    let currentIndex = 0;
-
-    function openLB(index){
-      currentIndex = index;
-      const a = shotLinks[currentIndex];
-      lbImg.src = a.getAttribute('href');
-      lbCap.textContent = a.getAttribute('data-caption') || a.querySelector('img')?.alt || 'Preview';
-      lb.classList.add('open');
+    // Lightweight parallax (subtle)
+    const parallaxEls = Array.from(document.querySelectorAll('[data-parallax]'));
+    function onScroll(){
+      const y = window.scrollY || 0;
+      for (const el of parallaxEls){
+        const k = parseFloat(el.getAttribute('data-parallax') || '0');
+        el.style.transform = `translateY(${-(y * k)}px)`;
+      }
     }
+    window.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
 
-    function closeLB(){
-      lb.classList.remove('open');
-      // prevent “flash” of old image if user reopens quickly
-      setTimeout(()=>{ if(!lb.classList.contains('open')) lbImg.src = ''; }, 120);
-    }
-
-    function nextLB(){
-      if (!shotLinks.length) return;
-      currentIndex = (currentIndex + 1) % shotLinks.length;
-      openLB(currentIndex);
-    }
-
-    // click handler
-    shotLinks.forEach((a, idx)=>{
-      a.addEventListener('click', (e)=>{
-        e.preventDefault();
-        openLB(idx);
-      });
-    });
-
-    close.addEventListener('click', closeLB);
-    next.addEventListener('click', nextLB);
-    lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLB(); });
-    window.addEventListener('keydown', (e)=>{
-      if (!lb.classList.contains('open')) return;
-      if (e.key === 'Escape') closeLB();
-      if (e.key === 'ArrowRight') nextLB();
-      if (e.key === 'Enter') nextLB();
-    });
-
-    // Tiny parallax on phone (mouse + scroll) - subtle luxury motion
-    const phone = document.getElementById('phone');
-    let mouseX = 0, mouseY = 0;
-    window.addEventListener('mousemove', (e)=>{
-      const cx = window.innerWidth / 2;
-      const cy = window.innerHeight / 2;
-      mouseX = (e.clientX - cx) / cx;   // -1..1
-      mouseY = (e.clientY - cy) / cy;   // -1..1
-    }, { passive:true });
-
-    function raf(){
-      const scroll = window.scrollY || 0;
-      const tiltX = (-mouseY * 3);
-      const tiltY = (mouseX * 4);
-      const lift = Math.min(scroll / 1200, 1) * -6; // slight lift on scroll
-      phone.style.transform = `translate3d(0, ${lift}px, 0) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-      requestAnimationFrame(raf);
-    }
-    // respect reduced motion
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (!reduce.matches) requestAnimationFrame(raf);
+    // Tone chips: tiny “alive” animation loop
+    const chips = Array.from(document.querySelectorAll('.chip'));
+    let idx = 0;
+    setInterval(() => {
+      chips.forEach(c => c.classList.remove('chipActive'));
+      chips[idx].classList.add('chipActive');
+      idx = (idx + 1) % chips.length;
+    }, 1800);
   </script>
 </body>
 </html>
