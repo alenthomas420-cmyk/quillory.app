@@ -10,7 +10,7 @@
   <link rel="icon" href="/assets/favicon.png" />
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
 
-  <!-- Social preview (optional but recommended) -->
+  <!-- Social preview -->
   <meta property="og:title" content="Quillory" />
   <meta property="og:description" content="Voice journaling, simplified." />
   <meta property="og:image" content="/assets/og.png" />
@@ -19,109 +19,289 @@
   <style>
     :root{
       --bg:#f6f1e8;
+      --bg2:#f2ede4;
       --card:#ffffff;
-      --text:#1f1f1f;
-      --muted:rgba(0,0,0,.55);
+      --text:#171717;
+      --muted:rgba(0,0,0,.56);
       --border:rgba(0,0,0,.10);
       --green:#2f6e55;
-      --shadow:0 14px 40px rgba(0,0,0,.08);
-      --radius:18px;
+      --green2:#3a8065;
+      --shadow:0 16px 60px rgba(0,0,0,.10);
+      --shadow2:0 12px 30px rgba(0,0,0,.08);
+      --radius:20px;
+      --radius2:26px;
+      --max:1080px;
     }
+
     *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
       font-family:-apple-system,BlinkMacSystemFont,system-ui,Segoe UI,Roboto,Arial,sans-serif;
-      background:var(--bg);
+      background: radial-gradient(1200px 800px at 20% -10%, rgba(47,110,85,.12), transparent 55%),
+                  radial-gradient(900px 700px at 100% 0%, rgba(47,110,85,.10), transparent 50%),
+                  linear-gradient(180deg,var(--bg),var(--bg2));
       color:var(--text);
+      overflow-x:hidden;
     }
+
     a{color:var(--green);text-decoration:none}
     a:hover{text-decoration:underline}
-    .wrap{max-width:1020px;margin:0 auto;padding:56px 22px}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
+
+    .wrap{max-width:var(--max);margin:0 auto;padding:56px 22px 70px}
+
+    /* Subtle animated background glow */
+    .glow{
+      position:fixed; inset:-20%;
+      pointer-events:none;
+      background:
+        radial-gradient(500px 380px at 15% 10%, rgba(47,110,85,.13), transparent 60%),
+        radial-gradient(620px 460px at 85% 20%, rgba(47,110,85,.10), transparent 60%),
+        radial-gradient(520px 420px at 55% 90%, rgba(47,110,85,.08), transparent 60%);
+      filter: blur(6px);
+      animation: drift 18s ease-in-out infinite;
+      opacity:.9;
+      z-index:-1;
+    }
+    @keyframes drift{
+      0%{transform:translate3d(0,0,0) scale(1)}
+      50%{transform:translate3d(-1.2%, .8%, 0) scale(1.02)}
+      100%{transform:translate3d(0,0,0) scale(1)}
+    }
+
+    header{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:14px;margin-bottom:22px;
+      position:sticky; top:0;
+      padding:14px 0;
+      backdrop-filter:saturate(180%) blur(10px);
+      -webkit-backdrop-filter:saturate(180%) blur(10px);
+      background:linear-gradient(180deg, rgba(246,241,232,.78), rgba(246,241,232,.35));
+      border-bottom:1px solid rgba(0,0,0,.04);
+      z-index:50;
+    }
+
     .brand{display:flex;align-items:center;gap:12px}
     .logo{
-      width:46px;height:46px;border-radius:14px;
-      box-shadow:0 10px 24px rgba(0,0,0,.10);
+      width:44px;height:44px;border-radius:14px;
+      box-shadow:0 10px 26px rgba(0,0,0,.12);
       background:#fff;object-fit:cover;
       border:1px solid var(--border);
     }
-    .brandTitle{font-size:20px;font-weight:800;letter-spacing:-.3px}
-    .nav{display:flex;gap:14px;color:var(--muted);font-size:14px}
-    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:start}
-    @media (max-width:900px){.hero{grid-template-columns:1fr;}}
-    .h1{font-size:44px;line-height:1.08;margin:0 0 12px;letter-spacing:-1px}
-    .sub{margin:0 0 18px;color:var(--muted);font-size:16px;line-height:1.7}
+    .brandTitle{
+      font-size:18px;font-weight:900;letter-spacing:-.4px;
+      display:flex;align-items:baseline;gap:10px;
+    }
+    .pill{
+      font-size:12px;font-weight:800;color:rgba(0,0,0,.58);
+      border:1px solid rgba(0,0,0,.10);
+      padding:6px 10px;border-radius:999px;
+      background:rgba(255,255,255,.65);
+    }
+
+    .nav{display:flex;gap:14px;color:var(--muted);font-size:14px;flex-wrap:wrap}
+    .nav a{color:rgba(0,0,0,.62)}
+    .nav a:hover{color:rgba(0,0,0,.85);text-decoration:none}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:18px;
+      align-items:stretch;
+      margin-top:16px;
+    }
+    @media (max-width:980px){.hero{grid-template-columns:1fr}}
+
+    .h1{
+      font-size:52px;line-height:1.04;margin:0 0 14px;
+      letter-spacing:-1.3px;
+    }
+    @media (max-width:520px){.h1{font-size:40px}}
+    .sub{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.75;
+      max-width:56ch;
+    }
+
     .ctaRow{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
     .btn{
       display:inline-flex;align-items:center;justify-content:center;
-      padding:12px 14px;border-radius:999px;font-weight:700;font-size:14px;
-      border:1px solid var(--border);background:var(--card);
+      padding:12px 16px;border-radius:999px;font-weight:800;font-size:14px;
+      border:1px solid rgba(0,0,0,.12);
+      background:rgba(255,255,255,.85);
+      box-shadow:0 10px 24px rgba(0,0,0,.06);
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
     }
+    .btn:hover{transform:translateY(-1px);box-shadow:0 14px 30px rgba(0,0,0,.10);text-decoration:none}
     .btnPrimary{
-      background:var(--green);color:#fff;border-color:transparent;
-      box-shadow:0 14px 26px rgba(47,110,85,.22);
+      background:linear-gradient(180deg,var(--green2),var(--green));
+      color:#fff;border-color:transparent;
+      box-shadow:0 18px 30px rgba(47,110,85,.22);
     }
-    .note{margin-top:10px;color:var(--muted);font-size:13px}
+    .btnPrimary:hover{box-shadow:0 22px 40px rgba(47,110,85,.26)}
+    .btn svg{margin-left:8px}
+
+    .note{margin-top:12px;color:rgba(0,0,0,.55);font-size:13px}
+
     .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      padding:16px;
+      background:rgba(255,255,255,.85);
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:var(--radius2);
+      padding:18px;
       box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
     }
-    .screensHeader{display:flex;align-items:end;justify-content:space-between;margin-top:28px;margin-bottom:10px}
+    .card:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(420px 240px at 20% 0%, rgba(47,110,85,.16), transparent 62%),
+                  radial-gradient(360px 260px at 90% 10%, rgba(47,110,85,.10), transparent 60%);
+      opacity:.55;
+      pointer-events:none;
+    }
+    .card > *{position:relative}
+
+    .miniTitle{font-weight:900;letter-spacing:-.2px;display:flex;justify-content:space-between;gap:10px}
+    .miniTitle span{font-weight:800;color:rgba(0,0,0,.55);font-size:13px}
+
+    .bullets{
+      margin-top:12px;
+      color:rgba(0,0,0,.62);
+      line-height:1.7;
+      font-size:14px;
+    }
+
+    /* Screens */
+    .screensHeader{
+      display:flex;align-items:end;justify-content:space-between;
+      margin-top:28px;margin-bottom:10px;gap:12px;flex-wrap:wrap;
+    }
     .screensHeader h2{margin:0;font-size:18px;letter-spacing:-.2px}
     .screensHeader span{color:var(--muted);font-size:13px}
+
     .grid{
       display:grid;
       grid-template-columns:repeat(3, 1fr);
-      gap:10px;
+      gap:12px;
     }
-    @media (max-width:900px){.grid{grid-template-columns:repeat(2, 1fr);}}
+    @media (max-width:980px){.grid{grid-template-columns:repeat(2, 1fr);}}
     @media (max-width:520px){.grid{grid-template-columns:1fr;}}
+
     .shot{
-      border-radius:16px;
-      border:1px solid var(--border);
-      background:#fff;
+      border-radius:18px;
+      border:1px solid rgba(0,0,0,.12);
+      background:rgba(255,255,255,.9);
       overflow:hidden;
       aspect-ratio: 9 / 19.5;
       display:block;
-      box-shadow:0 10px 28px rgba(0,0,0,.06);
+      box-shadow:var(--shadow2);
+      transform:translateY(0);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      position:relative;
+      isolation:isolate;
     }
-    .shot img{width:100%;height:100%;object-fit:cover;display:block}
+    .shot:before{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(300px 220px at 40% 10%, rgba(47,110,85,.12), transparent 60%);
+      opacity:0;
+      transition: opacity .2s ease;
+      z-index:1;
+      pointer-events:none;
+    }
+    .shot:hover{
+      transform:translateY(-2px);
+      box-shadow:0 18px 44px rgba(0,0,0,.14);
+      border-color:rgba(47,110,85,.25);
+    }
+    .shot:hover:before{opacity:1}
+    .shot img{width:100%;height:100%;object-fit:cover;display:block;position:relative;z-index:0}
+
+    /* Feature cards */
     .features{
-      margin-top:18px;
+      margin-top:16px;
       display:grid;
       grid-template-columns:repeat(3,1fr);
-      gap:10px;
+      gap:12px;
     }
-    @media (max-width:900px){.features{grid-template-columns:1fr}}
-    .feature h3{margin:0 0 6px;font-size:14px}
+    @media (max-width:980px){.features{grid-template-columns:1fr}}
+    .feature h3{margin:0 0 6px;font-size:14px;letter-spacing:-.1px}
     .feature p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+
     footer{
-      margin-top:26px;padding-top:16px;border-top:1px solid var(--border);
+      margin-top:26px;padding-top:16px;border-top:1px solid rgba(0,0,0,.10);
       display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
-      color:var(--muted);font-size:13px;
+      color:rgba(0,0,0,.55);font-size:13px;
     }
 
-    /* Simple lightbox */
-    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center;padding:22px;z-index:9999}
+    /* Reveal animation */
+    .reveal{
+      opacity:0;
+      transform: translateY(14px);
+      transition: opacity .7s cubic-bezier(.2,.8,.2,1),
+                  transform .7s cubic-bezier(.2,.8,.2,1);
+      will-change: opacity, transform;
+    }
+    .reveal.in{
+      opacity:1;
+      transform: translateY(0);
+    }
+    .delay1{transition-delay:.06s}
+    .delay2{transition-delay:.12s}
+    .delay3{transition-delay:.18s}
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed;inset:0;
+      background:rgba(0,0,0,.78);
+      display:none;
+      align-items:center;justify-content:center;
+      padding:22px;
+      z-index:9999
+    }
     .lightbox.open{display:flex}
-    .lightbox img{max-width:min(520px, 92vw);max-height:92vh;border-radius:18px}
+    .lightboxInner{
+      position:relative;
+      max-width:min(560px, 92vw);
+      max-height:92vh;
+    }
+    .lightbox img{
+      width:100%;
+      height:auto;
+      max-height:92vh;
+      border-radius:22px;
+      display:block;
+      box-shadow:0 30px 90px rgba(0,0,0,.45);
+    }
     .closeBtn{
-      position:absolute;top:18px;right:18px;
+      position:absolute;top:-52px;right:0;
       background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22);
-      border-radius:999px;padding:10px 12px;font-weight:700;cursor:pointer
+      border-radius:999px;padding:10px 12px;font-weight:800;cursor:pointer
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .glow{animation:none}
+      .btn,.shot{transition:none}
+      .reveal{transition:none;opacity:1;transform:none}
     }
   </style>
 </head>
 
 <body>
+  <div class="glow" aria-hidden="true"></div>
+
   <div class="wrap">
     <header>
       <div class="brand">
         <img class="logo" src="/assets/icon.png" alt="Quillory icon" />
-        <div class="brandTitle">Quillory</div>
+        <div class="brandTitle">
+          Quillory
+          <span class="pill">Private voice journaling</span>
+        </div>
       </div>
 
       <nav class="nav">
@@ -132,27 +312,34 @@
     </header>
 
     <section class="hero">
-      <div>
+      <div class="reveal in">
         <h1 class="h1">Voice journaling,<br/>simplified.</h1>
         <p class="sub">
-          Record your thoughts through the day. Quillory turns them into one clean summary — calm, private, and fast.
+          Record your thoughts through the day. Quillory turns them into one clean summary —
+          calm, private, and fast.
         </p>
 
         <div class="ctaRow">
           <!-- Replace # with your App Store link when ready -->
-          <a class="btn btnPrimary" href="#" aria-label="Download Quillory">Download</a>
+          <a class="btn btnPrimary" href="#" aria-label="Download Quillory">
+            Download
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 17L17 7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              <path d="M9 7h8v8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </a>
           <a class="btn" href="/support/">Contact support</a>
         </div>
 
         <div class="note">Support: <a href="mailto:support@quillory.app">support@quillory.app</a></div>
       </div>
 
-      <div class="card">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-          <div style="font-weight:800;letter-spacing:-.2px;">A calmer way to log your day</div>
-          <div style="color:var(--muted);font-size:13px;">Private by default</div>
+      <div class="card reveal delay2" id="sideCard">
+        <div class="miniTitle">
+          <div>A calmer way to log your day</div>
+          <span>Private by default</span>
         </div>
-        <div style="margin-top:12px;color:var(--muted);line-height:1.7;font-size:14px;">
+        <div class="bullets">
           • One-tap voice memories<br/>
           • End-of-day summary<br/>
           • Optional audio playback<br/>
@@ -161,12 +348,12 @@
       </div>
     </section>
 
-    <div class="screensHeader">
+    <div class="screensHeader reveal delay1" id="shotsTitle">
       <h2>Screenshots</h2>
       <span>Tap any image to zoom</span>
     </div>
 
-    <section class="grid" id="shots">
+    <section class="grid reveal delay2" id="shots">
       <!-- Put images in /assets/screens/ and keep these filenames -->
       <a class="shot" href="/assets/screens/01.png"><img src="/assets/screens/01.png" alt="Quillory screenshot 1"></a>
       <a class="shot" href="/assets/screens/02.png"><img src="/assets/screens/02.png" alt="Quillory screenshot 2"></a>
@@ -176,7 +363,7 @@
       <a class="shot" href="/assets/screens/06.png"><img src="/assets/screens/06.png" alt="Quillory screenshot 6"></a>
     </section>
 
-    <section class="features">
+    <section class="features reveal delay3" id="features">
       <div class="card feature">
         <h3>Minimal friction</h3>
         <p>Open the app, record, done. No complicated setup.</p>
@@ -191,7 +378,7 @@
       </div>
     </section>
 
-    <footer>
+    <footer class="reveal delay3" id="footer">
       <div>© <span id="y"></span> Quillory</div>
       <div>
         <a href="/privacy/">Privacy</a> ·
@@ -202,14 +389,18 @@
   </div>
 
   <!-- Lightbox -->
-  <div class="lightbox" id="lb" role="dialog" aria-modal="true">
-    <button class="closeBtn" id="lbClose">Close</button>
-    <img id="lbImg" alt="Screenshot preview" />
+  <div class="lightbox" id="lb" role="dialog" aria-modal="true" aria-label="Screenshot preview">
+    <div class="lightboxInner">
+      <button class="closeBtn" id="lbClose">Close</button>
+      <img id="lbImg" alt="Screenshot preview" />
+    </div>
   </div>
 
   <script>
+    // Year
     document.getElementById('y').textContent = new Date().getFullYear();
 
+    // Lightbox
     const lb = document.getElementById('lb');
     const lbImg = document.getElementById('lbImg');
     const close = document.getElementById('lbClose');
@@ -225,6 +416,20 @@
     close.addEventListener('click', () => lb.classList.remove('open'));
     lb.addEventListener('click', (e) => { if (e.target === lb) lb.classList.remove('open'); });
     window.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+
+    // Reveal on scroll (nice + lightweight)
+    const els = document.querySelectorAll('.reveal');
+    els.forEach(el => el.classList.remove('in')); // start hidden
+    const io = new IntersectionObserver((entries) => {
+      for (const entry of entries){
+        if (entry.isIntersecting){
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      }
+    }, { threshold: 0.12 });
+    els.forEach(el => io.observe(el));
   </script>
 </body>
 </html>
+
