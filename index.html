@@ -358,7 +358,136 @@
       transform:translateY(0);
       transition:transform .1s linear;
       will-change:transform;
-    }
+    /* =========================
+   MOBILE PREMIUM PATCH
+   ========================= */
+@media (max-width: 640px){
+
+  /* Page padding */
+  .wrap{
+    padding:16px 16px 64px;
+  }
+
+  /* Top bar */
+  .topbarInner{
+    padding:10px 16px;
+  }
+
+  .brand{
+    min-width:auto;
+  }
+
+  .logo{
+    width:36px;
+    height:36px;
+    border-radius:12px;
+  }
+
+  .brandTitle{
+    font-size:16px;
+  }
+
+  /* Hide subtitle under logo on mobile */
+  .brandTitle span{
+    display:none;
+  }
+
+  /* NAV: hide links, keep only Download */
+  .nav a{
+    display:none;
+  }
+
+  .nav .pillPrimary{
+    display:inline-flex;
+    padding:10px 14px;
+    font-size:13px;
+  }
+
+  /* HERO */
+  .hero{
+    grid-template-columns:1fr;
+    gap:16px;
+    padding:22px 0 12px;
+  }
+
+  h1{
+    font-size:38px;
+    line-height:1.05;
+    letter-spacing:-1px;
+    margin:12px 0 10px;
+  }
+
+  .sub{
+    font-size:15px;
+    line-height:1.75;
+    margin-bottom:14px;
+    max-width:none;
+  }
+
+  .kicker{
+    font-size:12px;
+    padding:7px 10px;
+  }
+
+  /* CTA buttons = full width */
+  .ctaRow{
+    gap:10px;
+  }
+
+  .pill{
+    width:100%;
+    justify-content:center;
+    padding:12px 14px;
+  }
+
+  /* HERO PHONE STACK */
+  .heroRight{
+    padding:14px;
+    min-height:auto;
+  }
+
+  .phoneStage{
+    height:320px;
+  }
+
+  /* Hide side phones */
+  .p1,
+  .p2{
+    display:none;
+  }
+
+  .p3{
+    position:relative;
+    transform:none !important;
+  }
+
+  .phone{
+    width:min(250px, 78vw);
+    border-radius:26px;
+  }
+
+  /* SCREENSHOTS */
+  .grid{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+
+  /* FEATURES + FAQ */
+  .features{
+    grid-template-columns:1fr;
+  }
+
+  .faq{
+    grid-template-columns:1fr;
+  }
+
+  /* FOOTER */
+  footer{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
+  }
+}
   </style>
 </head>
 
@@ -617,4 +746,5 @@
   </script>
 </body>
 </html>
+
 
