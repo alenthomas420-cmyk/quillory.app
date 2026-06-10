@@ -69,7 +69,7 @@ export default async function NewOpeningPage({
         your must-have attributes — you only review people who already answered
         the questions that matter to you.
       </p>
-      <div className="card">
+      <div className="card rise">
         <form className="stack" action={createOpening}>
           <label>
             Role title

@@ -75,7 +75,7 @@ export default async function OpeningCandidatesPage({
       </div>
 
       {apps.length === 0 && (
-        <div className="card">
+        <div className="card rise">
           <p>No candidates yet. Share your opening to get the word out.</p>
         </div>
       )}
@@ -86,11 +86,15 @@ export default async function OpeningCandidatesPage({
         if (!seeker) return null;
 
         return (
-          <div className="card" key={a.id}>
+          <div className="card lift rise" key={a.id}>
             <div className="row" style={{ justifyContent: "space-between" }}>
               <h2>{seeker.name}</h2>
               {a.fit_score != null && (
-                <span className="score" title="Fit score (1-5)">
+                <span
+                  className="score"
+                  title="Fit score (1-5)"
+                  style={{ "--pct": a.fit_score * 20 } as React.CSSProperties}
+                >
                   {a.fit_score}
                 </span>
               )}

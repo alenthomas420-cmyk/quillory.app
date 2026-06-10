@@ -34,7 +34,7 @@ export default async function LoginPage({
         No password — we email you a sign-in link. New here? The same link
         creates your account.
       </p>
-      <div className="card">
+      <div className="card rise">
         {sent ? (
           <p className="success">
             Check your inbox — your sign-in link is on its way.

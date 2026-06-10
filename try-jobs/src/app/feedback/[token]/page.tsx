@@ -35,7 +35,7 @@ export default async function FeedbackPage({
           ? "Your answer also releases the candidate's try-day payment."
           : "Two quick questions — it helps keep employers honest."}
       </p>
-      <div className="card">
+      <div className="card rise">
         <FeedbackForm token={token} role={payload.role} />
       </div>
     </>

@@ -70,7 +70,7 @@ export default async function DashboardPage() {
       </div>
 
       {profileIncomplete && (
-        <div className="card">
+        <div className="card lift rise">
           <h2>Finish your business profile</h2>
           <form className="stack" action={saveProfile}>
             <label>
@@ -106,7 +106,7 @@ export default async function DashboardPage() {
       </p>
 
       {(openings ?? []).length === 0 && (
-        <div className="card">
+        <div className="card lift rise">
           <p>
             Nothing posted yet. Your first opening takes under 3 minutes to
             create.
@@ -115,7 +115,7 @@ export default async function DashboardPage() {
       )}
 
       {(openings ?? []).map((o) => (
-        <div className="card" key={o.id}>
+        <div className="card lift rise" key={o.id}>
           <h2>
             <Link href={`/employer/openings/${o.id}`}>{o.title}</Link>
           </h2>

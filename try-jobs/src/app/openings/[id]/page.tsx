@@ -28,38 +28,48 @@ export default async function OpeningPage({
 
   return (
     <>
-      <h1>{opening.title}</h1>
-      <p className="meta">
-        {opening.location} ·{" "}
-        {new Date(opening.try_day_at).toLocaleString("en-CA", {
-          dateStyle: "full",
-          timeStyle: "short",
-        })}{" "}
-        · ${Number(opening.hourly_rate).toFixed(2)}/h CAD
-      </p>
-      <ul className="tags">
-        {opening.must_have_attributes.map((a) => (
-          <li key={a}>{a}</li>
-        ))}
-      </ul>
-
-      <div className="card">
-        <h2>How it works</h2>
-        <ol>
-          <li>Leave your name and number below.</li>
-          <li>
-            Our screening assistant calls you for a friendly 5-minute chat
-            (recorded and shared with the employer). Can&apos;t talk? You can
-            answer the same questions by text instead.
-          </li>
-          <li>
-            If the employer books you, you work one <strong>paid</strong>{" "}
-            trial shift — then you both decide if it&apos;s a fit.
-          </li>
-        </ol>
+      <div className="rise">
+        <div className="row" style={{ justifyContent: "space-between" }}>
+          <h1>{opening.title}</h1>
+          <span className="rate-chip">
+            ${Number(opening.hourly_rate).toFixed(2)}/h CAD
+          </span>
+        </div>
+        <p className="meta">
+          {opening.location} ·{" "}
+          {new Date(opening.try_day_at).toLocaleString("en-CA", {
+            dateStyle: "full",
+            timeStyle: "short",
+          })}
+        </p>
+        <ul className="tags">
+          {opening.must_have_attributes.map((a) => (
+            <li key={a}>{a}</li>
+          ))}
+        </ul>
       </div>
 
-      <div className="card">
+      <ol className="steps">
+        <li className="rise" style={{ "--delay": "0.08s" } as React.CSSProperties}>
+          <strong>Leave your number</strong>
+          Name and phone below — that&apos;s the whole application.
+        </li>
+        <li className="rise" style={{ "--delay": "0.16s" } as React.CSSProperties}>
+          <strong>Take a 5-minute call</strong>
+          Our screening assistant phones you (recorded, shared with the
+          employer). Can&apos;t talk? Answer the same questions by text.
+        </li>
+        <li className="rise" style={{ "--delay": "0.24s" } as React.CSSProperties}>
+          <strong>Work a paid try-day</strong>
+          If the employer books you, the trial shift is paid — then you both
+          decide if it&apos;s a fit.
+        </li>
+      </ol>
+
+      <div
+        className="card rise"
+        style={{ "--delay": "0.3s", marginTop: "1.6rem" } as React.CSSProperties}
+      >
         <h2>I&apos;m interested</h2>
         <InterestForm openingId={opening.id} />
       </div>
