@@ -1,0 +1,55 @@
+name: ALPHA-X Daily Briefing
+
+on:
+  schedule:
+    # Two entries so 7:00 AM Eastern is covered year-round:
+    # 11:00 UTC = 7 AM EDT (Mar-Nov), 12:00 UTC = 7 AM EST (Nov-Mar).
+    # The guard step below makes sure only the correct one actually runs.
+    - cron: "0 11 * * 1-5"
+    - cron: "0 12 * * 1-5"
+  workflow_dispatch: {}
+
+jobs:
+  briefing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check it is 7 AM Eastern (or a manual run)
+        id: tzcheck
+        run: |
+          hour=$(TZ=America/New_York date +%-H)
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ "$hour" = "7" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping: it is ${hour}:00 in New York, not 7 AM."
+          fi
+
+      - name: Checkout
+        if: steps.tzcheck.outputs.run == 'true'
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        if: steps.tzcheck.outputs.run == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        if: steps.tzcheck.outputs.run == 'true'
+        run: pip install anthropic yfinance markdown
+
+      - name: Generate and email briefing
+        if: steps.tzcheck.outputs.run == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python alpha-x/daily_briefing.py
+
+      - name: Archive briefing
+        if: steps.tzcheck.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: alpha-x-briefing-${{ github.run_id }}
+          path: briefing.md
+          retention-days: 90
